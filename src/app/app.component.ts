@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { quickSort } from './algos/quicksort';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +8,7 @@ import { quickSort } from './algos/quicksort';
 export class AppComponent implements OnInit {
 
   lines: number[] = [];
+  @ViewChild('simu') simuRef: ElementRef;
 
   constructor() {}
 
@@ -29,8 +29,8 @@ export class AppComponent implements OnInit {
     // let sortedArray: number[] = this.lines.sort((n1,n2) => n1 - n2);
 
     // Breaks reference for the array so that changes are registered
-    console.log(this.lines);
-    this.lines = quickSort(this.lines, [], []).map(function(num) {
+    // console.log(this.lines);
+    this.lines = this.quickSort(this.lines, [], []).map(function(num) {
       return num;
     });
 
@@ -46,6 +46,50 @@ export class AppComponent implements OnInit {
     }
     
     return array;
+  }
+
+  quickSort(initArray, metaLeft, metaRight) {
+    if (initArray.length <= 1) { 
+        return initArray;
+    } else {
+
+        var left = [];
+        var right = [];
+        var newArray = [];
+        var pivot = initArray.pop();
+        var length = initArray.length;
+
+        for (var i = 0; i < length; i++) {
+            if (initArray[i] <= pivot) {
+                left.push(initArray[i]);
+            } else {
+                right.push(initArray[i]);
+            }
+        }
+        // console.log([].concat(metaLeft, left, pivot, right, metaRight));
+        this.wait();
+        this.draw();
+        var sortedLeft = this.quickSort(left, metaLeft, [pivot].concat(right, metaRight))
+        var sortedRight = this.quickSort(right, metaLeft.concat(sortedLeft, pivot), metaRight)
+        return newArray.concat(sortedLeft, pivot, sortedRight);
+    }
+  }
+
+  draw() {
+    let ctx: CanvasRenderingContext2D = this.simuRef.nativeElement.getContext('2d');
+    ctx.clearRect(0, 0, 600, 600);
+    ctx.beginPath();
+    ctx.fillStyle = '#DD0031';
+    for (let i = 0 ; i < 600 ; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i, this.lines[i]);
+      ctx.stroke();
+    }
+  }
+
+  async wait() {
+    await new Promise(res => setTimeout(res, 500));
   }
 
 }
