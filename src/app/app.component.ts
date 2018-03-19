@@ -27,7 +27,9 @@ export class AppComponent implements OnInit {
   
   toggleSimu():void {
     // let sortedArray: number[] = this.lines.sort((n1,n2) => n1 - n2);
-    this.lines = this.quickSort(this.lines, [], []).map((num) => num);
+	this.quickSort(this.lines, [], []).then(sortedLines => {
+		this.lines = sortedLines;
+	});
   }
 
   shuffle(array): number[] {
@@ -41,7 +43,7 @@ export class AppComponent implements OnInit {
     return array;
   }
 
-  quickSort(initArray, metaLeft, metaRight) {
+  async quickSort(initArray, metaLeft, metaRight) {
     if (initArray.length <= 1) { 
         return initArray;
     } else {
@@ -59,10 +61,10 @@ export class AppComponent implements OnInit {
             }
         }
         // console.log([].concat(metaLeft, left, pivot, right, metaRight));
-        this.wait();
+        await this.wait();
         this.draw([].concat(metaLeft, left, pivot, right, metaRight));
-        var sortedLeft = this.quickSort(left, metaLeft, [pivot].concat(right, metaRight))
-        var sortedRight = this.quickSort(right, metaLeft.concat(sortedLeft, pivot), metaRight)
+        var sortedLeft = await this.quickSort(left, metaLeft, [pivot].concat(right, metaRight))
+        var sortedRight = await this.quickSort(right, metaLeft.concat(sortedLeft, pivot), metaRight)
         return newArray.concat(sortedLeft, pivot, sortedRight);
     }
   }
@@ -81,7 +83,7 @@ export class AppComponent implements OnInit {
   }
 
   async wait() {
-    await new Promise(res => setTimeout(res, 500));
+    await new Promise(res => setTimeout(res, 100));
   }
 
 }
