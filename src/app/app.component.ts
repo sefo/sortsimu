@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
     }
     
     this.lines = this.shuffle(this.lines);
+	this.draw(this.lines);
 
     // this.lines = [6, 7, 1, 5, 0, 3, 9, 8, 2, 4];
     
@@ -68,14 +69,14 @@ export class AppComponent implements OnInit {
         }
         // console.log([].concat(metaLeft, left, pivot, right, metaRight));
         this.wait();
-        this.draw();
+        this.draw([].concat(metaLeft, left, pivot, right, metaRight));
         var sortedLeft = this.quickSort(left, metaLeft, [pivot].concat(right, metaRight))
         var sortedRight = this.quickSort(right, metaLeft.concat(sortedLeft, pivot), metaRight)
         return newArray.concat(sortedLeft, pivot, sortedRight);
     }
   }
 
-  draw() {
+  draw(lines) {
     let ctx: CanvasRenderingContext2D = this.simuRef.nativeElement.getContext('2d');
     ctx.clearRect(0, 0, 600, 600);
     ctx.beginPath();
@@ -83,7 +84,7 @@ export class AppComponent implements OnInit {
     for (let i = 0 ; i < 600 ; i++) {
       ctx.beginPath();
       ctx.moveTo(i, 0);
-      ctx.lineTo(i, this.lines[i]);
+      ctx.lineTo(i, lines[i]);
       ctx.stroke();
     }
   }
