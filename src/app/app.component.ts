@@ -19,22 +19,15 @@ export class AppComponent implements OnInit {
     }
     
     this.lines = this.shuffle(this.lines);
-	this.draw(this.lines);
+	  this.draw(this.lines);
 
     // this.lines = [6, 7, 1, 5, 0, 3, 9, 8, 2, 4];
     
   }
   
   toggleSimu():void {
-    // javascript array.sort
     // let sortedArray: number[] = this.lines.sort((n1,n2) => n1 - n2);
-
-    // Breaks reference for the array so that changes are registered
-    // console.log(this.lines);
-    this.lines = this.quickSort(this.lines, [], []).map(function(num) {
-      return num;
-    });
-
+    this.lines = this.quickSort(this.lines, [], []).map((num) => num);
   }
 
   shuffle(array): number[] {
@@ -45,7 +38,6 @@ export class AppComponent implements OnInit {
       array[current] = array[top];
       array[top] = tmp;
     }
-    
     return array;
   }
 
@@ -53,7 +45,6 @@ export class AppComponent implements OnInit {
     if (initArray.length <= 1) { 
         return initArray;
     } else {
-
         var left = [];
         var right = [];
         var newArray = [];
